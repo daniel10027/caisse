@@ -5,18 +5,23 @@ const path = require('path');
 const { app, BrowserWindow, Menu } = electron;
 
 let mainWindow;
-
+let login;
 //attente du chargement de la page
 app.on('ready',function(){
     //creation d'une nouvelle fenetre
-    mainWindow = new BrowserWindow({});
+    login = new BrowserWindow({icon: __dirname + '/image/favicon.png'});
+    mainWindow = new BrowserWindow({icon: __dirname + '/image/favicon.png'});
     //chargement du contenu Html
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname,'index.html'),
         protocol: 'file',
         slashes: true
     }));
-
+    login.loadURL(url.format({
+        pathname: path.join(__dirname,'login.html'),
+        protocol: 'file',
+        slashes: true
+    }));
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     Menu.setApplicationMenu(mainMenu);
 })

@@ -1,0 +1,12 @@
+.login 
+{
+    background-image: url('../image/8802e9d4bf_101179_04-1855.jpg');
+    background-repeat: repeat;
+    background-size: cover;
+}
+
+form
+{
+    position: relative;
+    top: 25%;
+}
