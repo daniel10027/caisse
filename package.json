@@ -1,0 +1,22 @@
+{
+  "name": "caisse_gestion_desktop",
+  "version": "1.0.0",
+  "description": "logiciel desktop de gestion de caisse",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreyCoderK/caisse_gestion_desktop.git"
+  },
+  "author": "Kossonou kouamé Maïzan Alain Serge",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GreyCoderK/caisse_gestion_desktop/issues"
+  },
+  "homepage": "https://github.com/GreyCoderK/caisse_gestion_desktop#readme",
+  "dependencies": {
+    "electron": "^4.0.4"
+  }
+}
