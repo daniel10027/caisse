@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const { app, BrowserWindow } = require('electron')
 
 // Gardez une reference globale de l'objet window, si vous ne le faites pas, la fenetre sera
@@ -46,3 +47,6 @@ app.on('activate', () => {
 })
 
 // Dans ce fichier, vous pouvez inclure le reste de votre code spécifique au processus principal. Vous pouvez également le mettre dans des fichiers séparés et les inclure ici.
+=======
+const electron = require('electron');
+>>>>>>> bc2b01783afa48b4c93556b43e5e3237194e5434

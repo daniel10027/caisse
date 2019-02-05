@@ -4,20 +4,32 @@
   "description": "logiciel desktop de gestion de caisse",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ."
+=======
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> bc2b01783afa48b4c93556b43e5e3237194e5434
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GreyCoderK/caisse_gestion_desktop.git"
   },
+<<<<<<< HEAD
   "author": "Kossonou Kouamé Maïzan Alain Serge",
+=======
+  "author": "Kossonou kouamé Maïzan Alain Serge",
+>>>>>>> bc2b01783afa48b4c93556b43e5e3237194e5434
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/GreyCoderK/caisse_gestion_desktop/issues"
   },
   "homepage": "https://github.com/GreyCoderK/caisse_gestion_desktop#readme",
+<<<<<<< HEAD
   "devDependencies": {
+=======
+  "dependencies": {
+>>>>>>> bc2b01783afa48b4c93556b43e5e3237194e5434
     "electron": "^4.0.4"
   }
 }
