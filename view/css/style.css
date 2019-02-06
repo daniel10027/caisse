@@ -1,0 +1,30 @@
+.login 
+{
+    background-image: url('../image/8802e9d4bf_101179_04-1855.jpg');
+    background-repeat: repeat;
+    background-size: cover;
+}
+
+.form 
+{
+    background-image: url('../image/nature-3d-wallpaper-2560x1600-1005018.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+form, table
+{
+    position: relative;
+    top: 20%;
+}
+ 
+a
+{
+    text-transform: none;
+}
+
+a:hover
+{
+    color: purple;
+    text-transform: none;
+}

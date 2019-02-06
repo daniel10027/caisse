@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Groupe de service</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+    </head>
+    <body class="form">
+        <div class="container-fluid" style="margin-top:10px;">
+            <div class="row">
+                <div class="col-4 col-sm col-md mx-auto">
+                </div>
+                <div class="col-4 col-sm col-md mx-auto">
+                    <form class="card">
+                        <div class="card-header">
+                            <h1 class="card-title">Ajouter un groupe de service</h1>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Groupe : </label>
+                                <input type="text" class="form-control" id="groupe" aria-describedby="groupe" placeholder="Entrez le groupe de service" autofocus required>
+                                <small id="emailHelp" class="form-text text-muted"></small>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">Pourcentage remise :</label>
+                                <input type="number" class="form-control" id="remise" min="0" max="10">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-4 col-sm col-md">
+                </div>
+            </div>
+        </div>
+        <script>
+            const electron = window.require('electron');
+            const {ipcRenderer} = electron;
+            const form = document.querySelector('form');
+            form.addEventListener('submit',submitForm)
+
+            function submitForm(e)
+            {   
+                e.preventDefault();
+                let groupe = document.querySelector('#groupe').value
+                let remise = document.querySelector('#remise').value
+                let item = {
+                    'groupe' : groupe,
+                    'remise'  :  remise
+                };
+                ipcRenderer.send('groupe:add', item);
+            }
+        </script>
+        <script src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    </body>
+</html>
