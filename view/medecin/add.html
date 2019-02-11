@@ -9,28 +9,53 @@
     <body class="form">
         <div class="container-fluid" style="margin-top:10px;">
             <div class="row">
-                <div class="col-4 col-sm col-md mx-auto">
-                </div>
-                <div class="col-4 col-sm col-md mx-auto">
+                <div class="col-3 col-sm-6 col-md mx-auto">
                     <form class="card">
                         <div class="card-header">
-                            <h1 class="card-title">Ajouter un groupe de service</h1>
+                            <h1 class="card-title">Ajouter un medecin</h1>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Groupe : </label>
-                                <input type="text" class="form-control" id="groupe" aria-describedby="groupe" placeholder="Entrez le groupe de service" autofocus required>
-                                <small id="emailHelp" class="form-text text-muted"></small>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="nom">Nom : </label>
+                                    <input type="text" class="form-control" id="nom" aria-describedby="nom" placeholder="Entrez le nom" autofocus required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="prenoms">Prenoms :</label>
+                                    <input type="text" class="form-control" id="prenoms" placeholder="Entrez un prenoms" required>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Pourcentage remise :</label>
-                                <input type="number" class="form-control" id="remise" min="0" max="10">
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="cni"> Carte nationale d'identité: </label>
+                                    <input type="text" class="form-control" id="cni" aria-describedby="cni" placeholder="Entrez le numero cni" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="contact"> Contact:</label>
+                                    <input type="number" class="form-control" id="contact" placeholder="Entrez un contact">
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="poste"> Poste: </label>
+                                    <input type="text" class="form-control" id="poste" aria-describedby="poste" placeholder="Entrez le poste" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="email"> Email:</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Entrez un email">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="ville"> Ville: </label>
+                                    <input type="text" class="form-control" id="ville" aria-describedby="ville" placeholder="Entrez la ville" required>
+                                </div>
+                                <div class="col form-group">
+                                    <button type="submit" class="btn btn-primary">Envoyer</button>                                
+                                </div>
+                            </div>
                         </div>
                     </form>
-                </div>
-                <div class="col-4 col-sm col-md">
                 </div>
             </div>
         </div>
@@ -43,13 +68,25 @@
             function submitForm(e)
             {   
                 e.preventDefault();
-                let groupe = document.querySelector('#groupe').value
-                let remise = document.querySelector('#remise').value
+                let nom = document.querySelector('#nom').value
+                let prenoms = document.querySelector('#prenoms').value
+                let email = document.querySelector('#email').value
+                let ville = document.querySelector('#ville').value
+                let poste = document.querySelector('#poste').value
+                let cni = document.querySelector('#cni').value
+                let contact = document.querySelector('#contact').value
+                
                 let item = {
-                    'groupe' : groupe,
-                    'remise'  :  remise
+                    'nom' : nom,
+                    'prenoms'  :  prenoms,
+                    'email': email,
+                    'ville': ville,
+                    'poste': poste,
+                    'cni': cni,
+                    'contact': contact
                 };
-                ipcRenderer.send('groupe:add', item);
+
+                ipcRenderer.send('medecin:add', item);
             }
         </script>
         <script src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>

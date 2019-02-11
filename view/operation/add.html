@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Groupe de service</title>
+        <title>Operation</title>
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
     </head>
@@ -10,46 +10,85 @@
         <div class="container-fluid" style="margin-top:10px;">
             <div class="row">
                 <div class="col-4 col-sm col-md mx-auto">
-                </div>
-                <div class="col-4 col-sm col-md mx-auto">
                     <form class="card">
                         <div class="card-header">
-                            <h1 class="card-title">Ajouter un groupe de service</h1>
+                            <h1 class="card-title">Ajouter une operation</h1>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Groupe : </label>
-                                <input type="text" class="form-control" id="groupe" aria-describedby="groupe" placeholder="Entrez le groupe de service" autofocus required>
-                                <small id="emailHelp" class="form-text text-muted"></small>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="nom">libelle : </label>
+                                    <input type="text" class="form-control" id="nom" aria-describedby="nom" placeholder="Entrez le nom" required autofocus>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="montant_normal">Montant normal :</label>
+                                    <input type="number" class="form-control" id="montant_normal" min="0" required>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Pourcentage remise :</label>
-                                <input type="number" class="form-control" id="remise" min="0" max="10">
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="montant_rabbais">Montant rabaissé :</label>
+                                    <input type="number" class="form-control" id="montant_rabbais" min="0" required>
+                                </div>
+                                <div class="col form-group">
+                                    <label for="quantity">Quantité :</label>
+                                    <input type="number" class="form-control" id="quantity" min="0" required>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label for="groupe"> Groupes: </label>
+                                    <select name="groupe" id="groupe" class="form-control" required>
+                                        <option value="">Choisissez un groupe de service</option>
+                                    </select>
+                                </div>
+                                <div class="col form-group">
+                                    <button type="submit" class="btn btn-primary">Envoyer</button>                            
+                                </div>
+                            </div>
                         </div>
                     </form>
-                </div>
-                <div class="col-4 col-sm col-md">
                 </div>
             </div>
         </div>
         <script>
+            Groupes = require('../../models/groupe')
+
+            select = document.querySelector('#groupe')
+            
+            Groupes.findAll().then( (element, err) => {
+                element.forEach(groupe => {
+                    const option = document.createElement('option')
+                    option.setAttribute('value', groupe.dataValues.id)
+                    const option_text = document.createTextNode(groupe.dataValues.nom)
+                    option.appendChild(option_text)
+                    select.appendChild(option)
+                });
+            })
+
             const electron = window.require('electron');
             const {ipcRenderer} = electron;
             const form = document.querySelector('form');
             form.addEventListener('submit',submitForm)
-
+            
             function submitForm(e)
             {   
                 e.preventDefault();
-                let groupe = document.querySelector('#groupe').value
-                let remise = document.querySelector('#remise').value
+                let nom = document.querySelector('#nom').value
+                let montant_normal = document.querySelector('#montant_normal').value
+                let montant_rabbais = document.querySelector('#montant_rabbais').value
+                let quantity = document.querySelector('#quantity').value
+                let groupe = document.getElementById('groupe').value
+                
                 let item = {
-                    'groupe' : groupe,
-                    'remise'  :  remise
+                    'nom' : nom,
+                    'montant_normal'  :  montant_normal,
+                    'montant_rabbais' : montant_rabbais,
+                    'quantity'  :  quantity,
+                    'groupe'  :  groupe,
                 };
-                ipcRenderer.send('groupe:add', item);
+                
+                ipcRenderer.send('operation:add', item);
             }
         </script>
         <script src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>

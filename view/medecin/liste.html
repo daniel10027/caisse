@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Medecin</title>
+        <link rel="stylesheet" href="../css/style.css">
+        <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+    </head>
+    <body class="form">
+        <div class="container" style="margin-top:10px;">
+            <div class="row">
+                <table style="top:15%;" class="table table-striped table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prenoms</th>
+                            <th scope="col">email</th>
+                            <th scope="col">Contact</th>
+                            <th scope="col">Ville</th>
+                            <th scope="col">Poste</th>
+                            <th scope="col">Cni</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script>
+            Medecins = require('../../models/medecin')
+
+            const tbody = document.querySelector('tbody');
+
+            liste = Medecins.findAll().then((element, err) => {
+                let i = 1;
+                element.forEach(medecin => {
+                    console.log(medecin.dataValues)
+                    
+                    const tr = document.createElement('tr')
+
+                    const id = document.createElement('th')
+                    const nom = document.createElement('td')
+                    const prenoms = document.createElement('td')
+                    const email = document.createElement('td')
+                    const contact = document.createElement('td')
+                    const ville = document.createElement('td')
+                    const poste = document.createElement('td')
+                    const cni = document.createElement('td')
+                    const action = document.createElement('td')
+
+                    const id_text = document.createTextNode(i)
+                    const nom_text = document.createTextNode(medecin.dataValues.nom)
+                    const prenoms_text = document.createTextNode(medecin.dataValues.prenoms)
+                    const email_text = document.createTextNode(medecin.dataValues.email)
+                    const contact_text = document.createTextNode(medecin.dataValues.contact)
+                    const ville_text = document.createTextNode(medecin.dataValues.ville)
+                    const poste_text = document.createTextNode(medecin.dataValues.poste)
+                    const cni_text = document.createTextNode(medecin.dataValues.cni)
+                    
+                    const edit = document.createElement('a')
+                    const del = document.createElement('a')
+
+                    edit.setAttribute('class','btn btn-primary mr-2')
+                    edit.setAttribute('id','edit'+medecin.dataValues.id)
+                    edit.innerText = 'Modifier'
+                    
+                    del.setAttribute('class','btn btn-danger')
+                    del.setAttribute('id','del'+medecin.dataValues.id)
+                    del.innerText = 'Effacer'
+                    
+                    action.appendChild(edit)
+                    action.appendChild(del)
+                    
+                    id.appendChild(id_text)
+                    nom.appendChild(nom_text)
+                    prenoms.appendChild(prenoms_text)
+                    email.appendChild(email_text)
+                    contact.appendChild(contact_text)
+                    ville.appendChild(ville_text)
+                    poste.appendChild(poste_text)
+                    cni.appendChild(cni_text)
+
+                    tr.appendChild(id)
+                    tr.appendChild(nom)
+                    tr.appendChild(prenoms)
+                    tr.appendChild(email)
+                    tr.appendChild(contact)
+                    tr.appendChild(ville)
+                    tr.appendChild(poste)
+                    tr.appendChild(cni)
+                    tr.appendChild(action)
+                    tbody.appendChild(tr)
+                    i += 1
+                });
+            })
+            
+        </script>
+        <script src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    </body>
+</html>

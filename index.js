@@ -7,7 +7,7 @@ const typeUsers = require('./models/typeUser')
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
-
+const crypto = require('crypto')
 const { app, BrowserWindow, Menu, ipcMain, dialog } = electron;
 
 let mainWindow, addedWindow;
@@ -21,7 +21,7 @@ app.on('ready',() => {
     Menu.setApplicationMenu(menuVide);
 
     //creation d'une nouvelle fenetre
-    mainWindow = new BrowserWindow({width:1050,height:600,icon: __dirname + 'view/image/favicon.png'});
+    mainWindow = new BrowserWindow({width:1050,height:600,icon: __dirname + '/view/image/favicon.png'});
     //chargement du contenu Html
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'view','login.html'),
@@ -34,7 +34,7 @@ app.on('ready',() => {
 
 function setMainWindow(name){
     addedWindow = mainWindow;
-    mainWindow = new BrowserWindow({title: 'Gestion des Caisses',width:1050,height:600,icon: __dirname + 'view/image/favicon.png'});
+    mainWindow = new BrowserWindow({title: 'Gestion des Caisses',width:1050,height:600,icon: __dirname + '/view/image/favicon.png'});
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'view',name),
         protocol: 'file',
@@ -52,7 +52,7 @@ function setMainWindow(name){
 } 
 
 function loadWindow(chemin){
-    addedWindow = new BrowserWindow({title: 'Gestion des Caisses',width:1050,height:600,icon: __dirname + 'view/image/favicon.png'});
+    addedWindow = new BrowserWindow({title: 'Gestion des Caisses',width:1050,height:600,icon: __dirname + '/view/image/favicon.png'});
     addedWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'view',chemin),
         protocol: 'file',
@@ -101,7 +101,7 @@ const mainMenuTemplate = [
                 label: 'Liste des medecins',
                 click()
                 {
-                    loadWindow('medecin/liste.html');
+                    setMainWindow('medecin/liste.html');
                 }
             }
         ]
@@ -120,7 +120,7 @@ const mainMenuTemplate = [
                 label: 'Liste des opérations',
                 click()
                 {
-                    loadWindow('operation/liste.html');
+                    setMainWindow('operation/liste.html');
                 }
             }
         ]
@@ -139,7 +139,7 @@ const mainMenuTemplate = [
                 label: 'Liste des utlisateurs',
                 click()
                 {
-                    loadWindow('utilisateur/liste.html');
+                    setMainWindow('utilisateur/liste.html');
                 }
             }
         ]
@@ -151,21 +151,21 @@ const mainMenuTemplate = [
                 label: 'Documentation',
                 click()
                 {
-                    loadWindow('about/document.html');
+                    setMainWindow('about/document.html');
                 }
             },
             {
                 label: 'Aide',
                 click()
                 {
-                    loadWindow('about/help.html');
+                    setMainWindow('about/help.html');
                 }
             },
             {
                 label: 'Auteur',
                 click()
                 {
-                    loadWindow('about/author.html');
+                    setMainWindow('about/author.html');
                 }
             }
         ]
@@ -179,29 +179,28 @@ const mainMenuTemplate = [
     }
 ];
 
-function login(element){
-    if(element.email != null && element.password)
-        return false
-    
-    users.findOne({
-        where: {
-            email: element.email,
-            password: element.password
-        }
-    }).then((user) => true)
-    return false
-}
 ipcMain.on('login:check', (e, item) => {
-    console.log(item)
-    setMainWindow('index.html');
-    // if(login(item))
-    // {
-    //     setMainWindow('index.html');
-    // }
-    // else
-    // {
-    //     dialog.showMessageBox({type: 'error',message: "Vous n'avez pas le droit de vous connectez car vos identifiant ne correspondent pas"})
-    // }
+    var findUser = function(item){
+        return users.find({
+            where: {
+               email: item.email,
+               password: item.password
+            }
+         }).then(function(device) {
+            if (!device) {
+                res = false
+                return false;
+            }
+            return device.dataValues.id;
+         });
+    };
+    findUser(item).then( function(UserDevice) {
+        if(UserDevice === 1){
+            setMainWindow('index.html'); 
+        }else{
+            dialog.showMessageBox({type: 'error',message: "Vous n'avez pas le droit de vous connectez car vos identifiant ne correspondent pas"}) 
+        }
+    })
 });
 
 ipcMain.on('groupe:add', (event, item) => {
@@ -226,32 +225,57 @@ ipcMain.on('medecin:add', (event, item) => {
 });
 
 ipcMain.on('utilisateur:add', (event, item) => {
+    if(item.email === null ||  item.password === null  || item.type_user === null){
+        dialog.showMessageBox({type: 'error',message: "Vous n'avez pas bien rempli certain champ"})
+    }   
+
+    // var cipher = crypto.createCipheriv('aes-256-cbc', buf1, buf2.slice(0,16));
+    // var cryptedBuffers = [cipher.update(new Buffer('this is some test'))];
+    // cryptedBuffers.push(cipher.final());
+
+
+    const cipher = crypto.createCipher('aes-192-gcm', '5hod@1m3');  
+    var encrypted = cipher.update(item.password, 'utf8', 'hex');  
+    encrypted += cipher.final('hex');  
+    
     users.create({
         email: item.email,
-        password: item.password,
-        type_user_id: item.type_user_id,
+        password: encrypted,
+        type_user_id: item.type_user,
     })
     setMainWindow('index.html');
 });
 
 ipcMain.on('operation:add', (event, item) => {
-    let ristourne = Groupes.findOne({
-    where: {
-        id: item.groupe
-    }
-    }).then( (groupe) => groupe.ristourne)
-
-    Operateurs.create({
-    nom: item.nom,
-    montant_normal: item.montant_normal,
-    montant_rabbais: item.montant_rabbais,
-    quantity : item.quantity,
-    montant_encaisse: item.montant_rabbais * item.quantity,
-    groupe: item.groupe,
-    montant_payer:  (item.montant_rabbais * item.quantity)( 1 - (ristourne/ 100))
-    })
-
-    setMainWindow('index.html');
+    var findUserDevice = function(userDeviceId){
+        // return the promise itself
+        return Groupes.find({
+            where: {
+               id: userDeviceId
+            }
+         }).then(function(device) {
+            if (!device) {
+                return false;
+            }
+            return device.dataValues.ristourne;
+         });
+    };
+    findUserDevice(item.groupe).then( function(UserDevice) {
+        Operateurs.create({
+                nom: item.nom,
+                montant_normal: item.montant_normal,
+                montant_rabbais: item.montant_rabbais,
+                quantity : item.quantity,
+                montant_encaisse: item.montant_rabbais * item.quantity,
+                groupe: item.groupe,
+                montant_payer:  item.montant_rabbais * item.quantity - item.montant_rabbais * item.quantity * UserDevice / 100,
+                rabbais: item.montant_rabbais * item.quantity - item.montant_rabbais * item.quantity + item.montant_rabbais * item.quantity * UserDevice / 100
+            }).then(() => {
+                setMainWindow('index.html');
+            }).catch(err => {
+                dialog.showMessageBox({type: 'error',message: err})
+            })
+     });
 });
 
 if(process.platform == "darwin"){

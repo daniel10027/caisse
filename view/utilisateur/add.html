@@ -2,9 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Groupe de service</title>
+        <title>Utilissateur</title>
         <link rel="stylesheet" href="../css/style.css">
         <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="/DataTables/datatables.css">
     </head>
     <body class="form">
         <div class="container-fluid" style="margin-top:10px;">
@@ -18,15 +19,24 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Email : </label>
+                                <label for="email">Email : </label>
                                 <input type="email" class="form-control" id="email" aria-describedby="email" placeholder="Entrez un email" autofocus required>
                                 <small id="emailHelp" class="form-text text-muted"></small>
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputPassword1">Password :</label>
-                                <input type="number" class="form-control" id="remise" min="0" max="10">
+                                <label for="password">Password :</label>
+                                <input type="password" class="form-control" id="password">
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <div class="form-group">
+                                <label for="type_user">Type utilisateur</label>
+                                <select class="form-control" name="type_user" id="type_user">
+                                    <option value="">Choisissez un type utilisateur</option>
+                                    <option value="0">Standard</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">Super Admin</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Envoyer</button>
                         </div>
                     </form>
                 </div>
@@ -34,7 +44,9 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" charset="utf8" src="/DataTables/datatables.js"></script>
         <script>
+            
             const electron = window.require('electron');
             const {ipcRenderer} = electron;
             const form = document.querySelector('form');
@@ -43,13 +55,15 @@
             function submitForm(e)
             {   
                 e.preventDefault();
-                let groupe = document.querySelector('#groupe').value
-                let remise = document.querySelector('#remise').value
+                let email = document.querySelector('#email').value
+                let password = document.querySelector('#password').value
+                let type_user = document.querySelector('#type_user').value
                 let item = {
-                    'groupe' : groupe,
-                    'remise'  :  remise
+                    'email' : email,
+                    'password'  :  password,
+                    'type_user' : type_user
                 };
-                ipcRenderer.send('groupe:add', item);
+                ipcRenderer.send('utilisateur:add', item);
             }
         </script>
         <script src="../../node_modules/bootstrap/dist/js/bootstrap.js"></script>

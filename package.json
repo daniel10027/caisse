@@ -19,6 +19,8 @@
   "homepage": "https://github.com/GreyCoderK/caisse_gestion_desktop#readme",
   "dependencies": {
     "bootstrap": "^4.2.1",
+    "datatables.net": "^1.10.19",
+    "datatables.net-dt": "^1.10.19",
     "electron": "^4.0.4",
     "mysql": "^2.16.0",
     "mysql2": "^1.6.5",
